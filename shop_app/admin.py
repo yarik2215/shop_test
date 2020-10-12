@@ -13,11 +13,12 @@ class ProductAdmin(admin.ModelAdmin):
     '''
     Item model representation on admin site.
     '''
-    list_display = ('name','category','price')
-    list_editable = ('price')
+    list_display = ('name','category','price','image_preview')
+    list_editable = ('price',)
     list_filter = ('category',)
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+
 
 
 @admin.register(models.Order)

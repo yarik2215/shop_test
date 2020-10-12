@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.fields import CharField, DecimalField, TextField
 from django.utils.translation import gettext_lazy as _
+from django.utils.safestring import mark_safe
 
 
 class Category(models.Model):
@@ -20,9 +21,9 @@ class Category(models.Model):
 
 def image_upload_path(instance, filename):
     '''
-    Function that create path for saving item img depends on item name and id field.
+    Function that create path for saving item img depends on item slug field.
     '''
-    return f"images/{instance.name}_{instance.id}.png"
+    return f"images/{instance.slug}.png"
 
 class Product(models.Model):
     '''
@@ -40,6 +41,13 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def image_preview(self):
+        image = self.image
+        if image:
+            return mark_safe('<img src="{0}" width="50" height="50" />'.format(image.url))
+        else:
+            return '(No image)'
 
 
 
@@ -61,4 +69,3 @@ class Order(models.Model):
     price = models.DecimalField(_("price"), max_digits=12, decimal_places=2) 
     status = models.IntegerField(_("status"), choices=Status.choices, default=Status.WAITING)
     comment = models.TextField(_("comment"),blank=True,null=True)
-    
