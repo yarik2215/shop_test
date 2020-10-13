@@ -1,5 +1,7 @@
 from django.db import models
+from django.db.models.deletion import CASCADE
 from django.db.models.fields import CharField, DecimalField, TextField
+from django.db.models.fields.related import ForeignKey
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
 
@@ -35,6 +37,7 @@ class Product(models.Model):
     description = models.TextField(_("description"), blank=True, null=True)
     image = models.ImageField(_("image"), upload_to=image_upload_path)
     category = models.ForeignKey("Category",on_delete=models.SET_NULL, null=True, related_name="products")
+    available = models.BooleanField(_("available"), default=True)
     
     class Meta:
         ordering = ['name']
@@ -62,10 +65,26 @@ class Order(models.Model):
         DONE = 2, _("done")
         CANCELED = 3, _("canceled")
 
+    items = models.ManyToManyField('Product', through='OrderItems')
     first_name = models.CharField(_("first name"), max_length=254)
     last_name = models.CharField(_("last name"), max_length=254)
     email = models.EmailField(_("email"), max_length=254, db_index=True)
     phone = models.CharField(_("phone"), max_length=12, ) #TODO: add phone validator
-    price = models.DecimalField(_("price"), max_digits=12, decimal_places=2) 
+    price = models.DecimalField(_("price"), max_digits=12, decimal_places=2, null=True) 
     status = models.IntegerField(_("status"), choices=Status.choices, default=Status.WAITING)
     comment = models.TextField(_("comment"),blank=True,null=True)
+
+    def calc_price(self):
+        # e = models.ExpressionWrapper(models.F('item_count') * models.F('item__price'), output_field=models.DecimalField(max_digits=10,decimal_places=2))
+        # return self.orderitems_set.annotate(price=e).aggregate(models.Sum('price'))['price__sum']
+        return sum( (i.item.price * i.item_quantity for i in self.items.through.objects.all()) )
+
+
+
+class OrderItems(models.Model):
+    item = models.ForeignKey('Product', on_delete=CASCADE)
+    order = models.ForeignKey('Order', on_delete=CASCADE)
+    item_quantity = models.PositiveIntegerField(_('quantity'))
+
+    def image_preview(self):
+        return self.item.image_preview()
