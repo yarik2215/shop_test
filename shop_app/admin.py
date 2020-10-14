@@ -20,6 +20,15 @@ class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
+class OrderItemInline(admin.StackedInline):
+    '''
+    Items in order inline representation.
+    '''
+    model = models.OrderItems
+    fields = ('item','item_quantity','image_preview')
+    readonly_fields = ('image_preview',)
+    extra = 0
+
 
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
@@ -29,6 +38,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ('id','email','first_name','last_name','phone','price')
     search_fields = ('email','first_name','last_name')
     actions = ('close_order', 'process_order', 'cancel_order')
+    inlines = (OrderItemInline,)
 
     def close_order(self, request, queryset):
         '''
