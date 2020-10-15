@@ -35,12 +35,8 @@ def add_to_cart(request, slug, quantity):
     Add item to session based cart. If item already in cart
     change the amount of items to quantity value.
     '''
-    product = Product.objects.get(slug=slug)
-    try:
-        cart = request.session['cart']
-    except KeyError:
-        request.session['cart'] = dict()
-        cart = request.session['cart']
+    # product = Product.objects.get(slug=slug)
+    cart = request.session.setdefault('cart', dict())
     cart[slug] = quantity
     request.session.modified = True
     messages.add_message(request, messages.SUCCESS, 'Added to cart.')
