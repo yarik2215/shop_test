@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<div id="sidebar" class="filter-sidebar">
+    <h3>Categories</h3>
+    <form method="get">
+        <div class="list-unstyled mt-3 mb-4">
+        {{ filter.form }}
+        </div>
+        <input type="submit" class="btn btn-sm btn-block btn-primary" value="Filter"/>
+    </form>
+</div>
+
+
+<div class="card-deck mb-3 text-center">
+    
+    {% for product in filter.qs %}
+    <div class="card mb-4 shadow-sm card">
+      <div class="card-header">
+        <h4 class="my-0 font-weight-normal">{{product.name}}</h4>
+      </div>
+      <div class="card-body">
+        <div class="bd-placeholder-img card-img-top card-image"><img src="{{product.image.url}}" alt="{{product.slug}}" ></div>
+        <ul class="list-unstyled mt-3 mb-4">
+          <li>Price: {{product.price}}</li>
+        </ul>
+        <a href="{% url 'shop:detail' product.slug %}" class="btn btn-lg btn-block btn-primary">Detail</a>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+
+{% endblock content %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div>
+    <h3>Cart</h3>
+
+    {% if objects_list %}
+    <div class="card-deck mb-3 text-center">
+    {% for item in objects_list %}
+        <div class="card" style="width: 18rem;">
+            <div class="card-image">
+                <!--class card-img-top-->
+                <img src="{{item.image.url}}" alt="item.slug">
+            </div>
+            <div class="card-body">
+                <b>{{item.name | capfirst}}</b>
+                <p class="card-text">Quantity: {{item.item_count}} </p>
+                <p class="card-text">Price: {{item.price}} </p>
+            </div>
+            <p>
+                <tr>
+                    <td>
+                        <a href="{% url 'shop:delete' item.slug %}" class="btn btn-primary">Delete</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'shop:detail' item.slug %}?quantity={{item.item_count}}" class="btn btn-primary">Change</a>
+                    </td>
+                </tr>
+            </p>
+        </div>
+    {% endfor %}
+    </div>
+    <div class="center">
+        <p>Total price: {{total_price}}</p>
+        <p><a href="{% url 'shop:order' %}" class="btn btn-primary">Order</a></p>
+    </div>
+    {% else %}
+    <p>Cart is empty.</p>
+    {% endif %}
+
+</div>
+{% endblock content %}

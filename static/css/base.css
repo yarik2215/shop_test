@@ -1,0 +1,57 @@
+
+.filter-sidebar {
+    margin: 4px;
+    padding: 10px;
+    float: left;
+    position: relative;
+}
+
+.card {
+    margin: 10px;
+    float: left;
+    position: relative;
+    max-width: 200px;
+}
+
+
+.card-text {
+    padding: 10px;
+    background-color: #b3adad;
+    border: 5px solid #b3adad;
+    border-radius: 5px;
+    margin: 5px;
+    float: none;
+    text-align: center;
+}
+
+.card-text a {
+    color: black;
+    font-weight: bold;
+    font-size: large;
+    text-decoration: none;
+}
+
+.card-text p {
+    margin: 2px;
+}
+
+
+
+.card-image {
+    padding: 0px;
+    margin: 0px;
+}
+
+.card-image img{
+    height: 100px;
+    width: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.detail-image{
+    max-width: 40%;
+    height: auto;
+}
