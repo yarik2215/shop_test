@@ -73,6 +73,7 @@ class Order(models.Model):
     price = models.DecimalField(_("price"), max_digits=12, decimal_places=2, null=True) 
     status = models.IntegerField(_("status"), choices=Status.choices, default=Status.WAITING)
     comment = models.TextField(_("comment"),blank=True,null=True)
+    created_date = models.DateTimeField(auto_now=True)
 
     def calc_price(self):
         # e = models.ExpressionWrapper(models.F('item_count') * models.F('item__price'), output_field=models.DecimalField(max_digits=10,decimal_places=2))

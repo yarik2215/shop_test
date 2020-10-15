@@ -35,10 +35,11 @@ class OrderAdmin(admin.ModelAdmin):
     '''
     Item model representation on admin site.
     '''
-    list_display = ('id','email','first_name','last_name','phone','price')
+    list_display = ('id','email','first_name','last_name','phone','price','created_date')
     search_fields = ('email','first_name','last_name')
     actions = ('close_order', 'process_order', 'cancel_order')
     inlines = (OrderItemInline,)
+    date_hierarchy = 'created_date'
 
     def close_order(self, request, queryset):
         '''
